@@ -65,7 +65,7 @@ function profileVisitors_info() {
         'version' => '1.0.0',
         'guid' => '',
         'compatibility' => '18*',
-        'codename' => 'view_unread_posts',
+        'codename' => 'profile_visitors',
     );
 }
 
