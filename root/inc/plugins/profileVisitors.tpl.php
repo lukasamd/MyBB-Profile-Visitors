@@ -28,11 +28,13 @@ if (!defined("IN_MYBB")) exit;
  * Plugin Activator Class
  * 
  */
-class profileVisitorsActivator {
+class profileVisitorsActivator 
+{
 
     private static $tpl = array();
 
-    private static function getTpl() {
+    private static function getTpl() 
+    {
         global $db;
         
         
@@ -53,7 +55,7 @@ class profileVisitorsActivator {
             "title" => 'profileVisitors',
             "template" => $db->escape_string('<table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
 	<tr>
-		<td colspan="2" class="thead"><strong>$lang->profileVisitorsTitle</strong></td>
+		<td colspan="2" class="thead"><strong>{$lang->profileVisitorsTitle}</strong></td>
 	</tr>
 	{$profileVisitorsList}
 </table>'),
@@ -75,7 +77,8 @@ class profileVisitorsActivator {
         );
     }
 
-    public static function activate() {
+    public static function activate() 
+    {
         global $db;
         self::deactivate();
 
@@ -88,7 +91,8 @@ class profileVisitorsActivator {
         find_replace_templatesets('member_profile', '#' . preg_quote('{$modoptions}') . '#', '{$profileVisitors}{$modoptions}');    
     }
 
-    public static function deactivate() {
+    public static function deactivate() 
+    {
         global $db;
         self::getTpl();
 

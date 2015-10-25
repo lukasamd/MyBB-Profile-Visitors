@@ -3,6 +3,7 @@
 This plugin displays last profile visitors in member view like Invision Power Board. 
 There is few settings:
 
+* Integration with MyAlerts
 * Limit number of guests
 * Determine avatar dimensions
 * Users can disable this feature in UCP

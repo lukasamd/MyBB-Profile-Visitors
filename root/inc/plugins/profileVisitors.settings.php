@@ -28,9 +28,11 @@ if (!defined("IN_MYBB")) exit;
  * Plugin Installator Class
  * 
  */
-class profileVisitorsInstaller {
+class profileVisitorsInstaller 
+{
 
-    public static function install() {
+    public static function install() 
+    {
         global $db, $lang, $mybb;
         self::uninstall();
 
@@ -108,13 +110,26 @@ class profileVisitorsInstaller {
         );
         $db->insert_query('settings', $setting);
         
+        $setting = array(
+            'sid' => 'NULL',
+            'name' => 'profileVisitorsMyAlerts',
+            'title' => $db->escape_string($lang->profileVisitorsMyAlerts),
+            'description' => $db->escape_string($lang->profileVisitorsMyAlertsDesc),
+            'optionscode' => 'yesno',
+            'value' => '1',
+            'disporder' => $disporder++,
+            'gid' => $gid
+        );
+        $db->insert_query('settings', $setting);
+        
         if (!$db->field_exists("show_profile_visitors", "users")) {
             $db->add_column("users", "show_profile_visitors", "INT NOT NULL DEFAULT '1'");
         }
         rebuild_settings();
     }
 
-    public static function uninstall() {
+    public static function uninstall() 
+    {
         global $db;
         
         $result = $db->simple_select('settinggroups', 'gid', "name = 'profileVisitors'");

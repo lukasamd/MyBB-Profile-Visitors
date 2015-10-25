@@ -30,16 +30,15 @@ if (!defined("IN_MYBB")) exit;
  * 
  */
 if (profileVisitors::getConfig('Enabled')) {
-    global $lang;
-    
-    $lang->load("profileVisitors");
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitorsMyAlerts.php';
+       
+    $plugins->add_hook("global_start", ['profileVisitors', 'addTemplates']);
     $plugins->add_hook('member_profile_end', ['profileVisitors', 'actionProfile']);
     $plugins->add_hook('usercp_options_end', ['profileVisitors', 'profileOptionsStart']);
     $plugins->add_hook('usercp_do_options_start', ['profileVisitors', 'profileOptionsEnd']);
     $plugins->add_hook('pre_output_page', ['profileVisitors', 'pluginThanks']);
 }
 
- 
 /**
  * Standard MyBB info function
  * 
@@ -48,7 +47,6 @@ function profileVisitors_info() {
     global $lang;
     
     $lang->load("profileVisitors");
-    
     $lang->profileVisitorsDesc = '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="float:right;">' .
         '<input type="hidden" name="cmd" value="_s-xclick">' . 
         '<input type="hidden" name="hosted_button_id" value="3BTVZBUG6TMFQ">' .
@@ -62,7 +60,7 @@ function profileVisitors_info() {
         'website' => 'https://lukasztkacz.com',
         'author' => 'Lukasz Tkacz',
         'authorsite' => 'https://lukasztkacz.com',
-        'version' => '1.0.0',
+        'version' => '1.1.0',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',
@@ -74,8 +72,8 @@ function profileVisitors_info() {
  * 
  */
 function profileVisitors_install() {
-    require_once('profileVisitors.settings.php');
-    profileVisitorsInstaller::install();
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitors.settings.php';
+    profileVisitorsInstaller::install();    
 }
 
 function profileVisitors_is_installed() {
@@ -84,7 +82,7 @@ function profileVisitors_is_installed() {
 }
 
 function profileVisitors_uninstall() {
-    require_once('profileVisitors.settings.php');
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitors.settings.php';
     profileVisitorsInstaller::uninstall();
 }
 
@@ -93,50 +91,66 @@ function profileVisitors_uninstall() {
  * 
  */
 function profileVisitors_activate() {
-    require_once('profileVisitors.tpl.php');
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitors.tpl.php';
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitorsMyAlerts.php';
     profileVisitorsActivator::activate();
+    profileVisitorsMyAlerts::activate();
 }
 
 function profileVisitors_deactivate() {
-    require_once('profileVisitors.tpl.php');
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitors.tpl.php';
+    require_once MYBB_ROOT . '/inc/plugins/profileVisitorsMyAlerts.php';
     profileVisitorsActivator::deactivate();
-}
-
-/*
-* Template optimize
-* 
-*/
-global $templatelist;
-$templatelist .= ',profileVisitors_link,profileVisitors_counter,profileVisitors_linkCounter';
-if (THIS_SCRIPT == 'showthread.php') {
-    $templatelist .= ',profileVisitors_postbit'; 
-}
-if (THIS_SCRIPT == 'search.php') {
-    $templatelist .= ',profileVisitors_markAllReadLink,profileVisitors_threadStartDate'; 
+    profileVisitorsMyAlerts::deactivate();
 }
 
 /**
  * Plugin Class 
  * 
  */
-class profileVisitors {  
-
-
+class profileVisitors 
+{
+    /**
+     * Add templates - all initial actions
+     *      
+     */
+    public static function addTemplates() 
+    {
+        global $lang, $cache, $templatelist, $formatterManager;
+        
+        $lang->load("profileVisitors");
+        if (THIS_SCRIPT == 'memberlist.php') {
+            $templatelist .= ',profileVisitors_Row,profileVisitors'; 
+        }
+        if (THIS_SCRIPT == 'usercp.php') {
+            $templatelist .= ',profileVisitors_UCP'; 
+        }
+        
+        if (profileVisitorsMyAlerts::isEnabled()) {
+            profileVisitorsMyAlerts::registerFormatter();
+        }
+    }
     
+    
+        
     /**
      * Actions in profile view - collect data and display table
      *      
      */
-    public static function actionProfile() { 
+    public static function actionProfile() 
+    { 
         global $db, $lang, $memprofile, $mybb, $profileVisitors, $theme, $templates;
-
+        
         // Save data about view
         if ($memprofile['uid'] != $mybb->user['uid'] 
             && ($memprofile['show_profile_visitors'] || self::getConfig('ForceSave'))
             ) {
             $sql = "REPLACE INTO " . TABLE_PREFIX . "profile_visitors 
                     VALUES ({$memprofile['uid']}, {$mybb->user['uid']}, " . TIME_NOW . ")";
-            $db->query($sql); 
+            $db->query($sql);
+            
+            // Send alert
+            profileVisitorsMyAlerts::alert($memprofile['uid'], $mybb->user['uid']); 
         }
         
         // Select data and cleanup 
@@ -166,14 +180,13 @@ class profileVisitors {
         }
 
         // Something to do?
-        if (!$memprofile['show_profile_visitors']) {
+        if (!$memprofile['show_profile_visitors'] || !$num_visitors) {
             return;
         }
         
         // Display table
         $profileVisitorsList = '';
-        foreach ($visitors as $visitor)
-        { 
+        foreach ($visitors as $visitor) { 
             $visitor['username'] = format_name($visitor['username'], $visitor['usergroup'], $visitor['displaygroup']);
     		$visitor['profilelink'] = build_profile_link($visitor['username'], $visitor['uid']);
             $visitor['date'] = my_date('relative', $visitor['datestamp']);
@@ -188,8 +201,12 @@ class profileVisitors {
      * Display option in profile settings
      *      
      */
-    public static function profileOptionsStart() {
+    public static function profileOptionsStart() 
+    {
         global $mybb, $user, $lang, $profileVisitorsUCP, $profileVisitorsOption, $templates;
+        
+        // Load lang
+        $lang->load("profileVisitors");
 
         $profileVisitors = '';
         $profileVisitorsOption = '';
@@ -204,7 +221,8 @@ class profileVisitors {
      * Save options from profile settings
      *      
      */
-    public static function profileOptionsEnd() {
+    public static function profileOptionsEnd() 
+    {
         global $mybb, $db;
         
         $show_profile_visitors = 0;
@@ -215,17 +233,14 @@ class profileVisitors {
     	$db->update_query("users", array('show_profile_visitors' => $show_profile_visitors), "uid = {$mybb->user['uid']}");
     }
     
-
-
-  
-
     /**
      * Helper function to get variable from config
      * 
      * @param string $name Name of config to get
      * @return string Data config from MyBB Settings
      */
-    public static function getConfig($name) {
+    public static function getConfig($name) 
+    {
         global $mybb;
 
         return $mybb->settings["profileVisitors{$name}"];
@@ -236,7 +251,8 @@ class profileVisitors {
      * Please don't remove this code if you didn't make donate
      * It's the only way to say thanks without donate :)     
      */
-    public static function pluginThanks(&$content) {
+    public static function pluginThanks(&$content) 
+    {
         global $session, $lukasamd_thanks;
         
         if (!isset($lukasamd_thanks) && $session->is_spider) {

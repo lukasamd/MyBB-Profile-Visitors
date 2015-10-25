@@ -1,2 +1,9 @@
+Version 1.1.0
+    * Integration with MyAlerts
+    * Small template fix
+    * Small language fix
+    * Few optimizations
+
+
 Version 1.0.0
     * First release 

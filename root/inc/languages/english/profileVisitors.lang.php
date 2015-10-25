@@ -20,3 +20,6 @@
 
 $l['profileVisitorsTitle'] = 'Last visitors';
 $l['profileVisitorsLabel'] = 'Show last visitors in profile view.';
+
+$l['profileVisitorsAlert'] = "{1} has visited your profile.";
+$l['myalerts_setting_profilevisitors'] = 'Receive an alert when someone visit my profile?';
