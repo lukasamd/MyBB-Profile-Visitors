@@ -1,3 +1,7 @@
+Version 1.1.1
+    * MyAlerts bugfix
+
+
 Version 1.1.0
     * Integration with MyAlerts
     * Small template fix

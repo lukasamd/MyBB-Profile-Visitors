@@ -84,6 +84,8 @@ class profileVisitorsMyAlerts
 
     public static function deactivate() 
     {
+        global $db, $cache;
+    
         if (self::isEnabled()) {
             $alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
             $alertTypeManager->deleteByCode('profilevisitors');
