@@ -60,7 +60,7 @@ function profileVisitors_info() {
         'website' => 'https://lukasztkacz.com',
         'author' => 'Lukasz Tkacz',
         'authorsite' => 'https://lukasztkacz.com',
-        'version' => '1.1.1',
+        'version' => '1.1.2',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',

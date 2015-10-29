@@ -31,12 +31,12 @@ class profileVisitorsMyAlerts
 
     public static function isEnabled()
     {
+        global $db, $cache;
+        
         if ($enabled !== null) {
             return $enabled;
         }
-        
-        
-        
+
         if (!function_exists('myalerts_is_activated') 
             || !myalerts_is_activated()
             || !profileVisitors::getConfig('MyAlerts')    
@@ -45,7 +45,8 @@ class profileVisitorsMyAlerts
             return false;    
         }
         
-        self::$alert = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('profilevisitors');    
+        $alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
+        self::$alert = $alertTypeManager->getByCode('profilevisitors');    
         if (!self::$alert->getEnabled()) {
             self::$enabled = false;
             return false;
@@ -63,9 +64,9 @@ class profileVisitorsMyAlerts
     
     public function registerFormatter() 
     {
-        global $mybb, $lang, $formatterManager;
+        global $db, $cache, $mybb, $lang, $formatterManager;
         
-		$formatterManager = MybbStuff_MyAlerts_AlertFormatterManager::getInstance();
+        $formatterManager = MybbStuff_MyAlerts_AlertFormatterManager::createInstance($mybb, $lang);
 		$formatterManager->registerFormatter(new profileVisitorsFormatter($mybb, $lang, "profilevisitors"));
     }
 

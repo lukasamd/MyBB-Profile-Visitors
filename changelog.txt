@@ -1,3 +1,7 @@
+Version 1.1.2
+    * Small PHP warning fix
+
+
 Version 1.1.1
     * MyAlerts bugfix
 
