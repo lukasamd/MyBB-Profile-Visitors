@@ -27,7 +27,11 @@ class profileVisitorsFormatter extends MybbStuff_MyAlerts_Formatter_AbstractForm
 {
 	public function formatAlert(MybbStuff_MyAlerts_Entity_Alert $alert, array $outputAlert)
 	{
-        return $this->lang->sprintf($this->lang->profileVisitorsAlert, $this->buildShowLink($alert));				
+        $from_uid = $alert->getFromUserId();
+        $from = get_user($from_uid);
+        $username = format_name($from['username'], $from['usergroup'], $from['displaygroup']);
+    
+        return $this->lang->sprintf($this->lang->profileVisitorsAlert, $username);				
 	}
     
 	public function init()
@@ -39,10 +43,6 @@ class profileVisitorsFormatter extends MybbStuff_MyAlerts_Formatter_AbstractForm
     
 	public function buildShowLink(MybbStuff_MyAlerts_Entity_Alert $alert)
 	{
-        $from_uid = $alert->getFromUserId();
-        $from = get_user($from_uid);
-	
-        $from['username'] = format_name($from['username'], $from['usergroup'], $from['displaygroup']);
-        return build_profile_link($from['username'], $from['uid']);           
+        return "{$this->mybb->settings['bburl']}/member.php?action=profile&uid=" . $alert->getFromUserId();         
 	}
 }

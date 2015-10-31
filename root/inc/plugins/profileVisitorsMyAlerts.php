@@ -115,6 +115,12 @@ class profileVisitorsMyAlerts
 			'uid = ' .$uid . ' AND from_user_id = ' . $from . ' AND unread = 1 AND alert_type_id = ' . self::$alert->getId() . ''
         );
         
+        if ($db->num_rows($result) == 0) {   
+            $alert = new MybbStuff_MyAlerts_Entity_Alert($uid, self::$alert, $from);
+            MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
+        }
+        
+        /*
         if ($db->num_rows($result) == 0) {   	
 			$alert = new MybbStuff_MyAlerts_Entity_Alert();
             $alert->setUserId($uid);
@@ -122,5 +128,6 @@ class profileVisitorsMyAlerts
             $alert->setFromUserId($from);
 			MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
 		}
+        */
     }
 }
