@@ -60,7 +60,7 @@ function profileVisitors_info() {
         'website' => 'https://lukasztkacz.com',
         'author' => 'Lukasz Tkacz',
         'authorsite' => 'https://lukasztkacz.com',
-        'version' => '1.2.0',
+        'version' => '1.3.0',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',
@@ -126,7 +126,9 @@ class profileVisitors
             $templatelist .= ',profileVisitors_UCP'; 
         }
         
-        $active = profileVisitorsMyAlerts::isEnabled();
+        if (profileVisitorsMyAlerts::isEnabled()) {
+            profileVisitorsMyAlerts::registerFormatter();
+        }
     }
     
     

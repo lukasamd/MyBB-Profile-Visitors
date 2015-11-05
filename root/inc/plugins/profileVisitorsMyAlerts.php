@@ -25,7 +25,7 @@
  */
 class profileVisitorsMyAlerts 
 {
-    static $alert = null;
+    static $alertType = null;
     static $enabled = null;
     
 
@@ -46,8 +46,8 @@ class profileVisitorsMyAlerts
         }
         
         $alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
-        self::$alert = $alertTypeManager->getByCode('profilevisitors');    
-        if (!self::$alert->getEnabled()) {
+        self::$alertType = $alertTypeManager->getByCode('profilevisitors');    
+        if (!self::$alertType->getEnabled()) {
             self::$enabled = false;
             return false;
         }
@@ -64,9 +64,12 @@ class profileVisitorsMyAlerts
     
     public function registerFormatter() 
     {
-        global $db, $cache, $mybb, $lang, $formatterManager;
-        
-        $formatterManager = MybbStuff_MyAlerts_AlertFormatterManager::createInstance($mybb, $lang);
+        global $db, $cache, $mybb, $lang;
+
+		$formatterManager = MybbStuff_MyAlerts_AlertFormatterManager::getInstance();
+		if($formatterManager === false) {
+			$formatterManager = MybbStuff_MyAlerts_AlertFormatterManager::createInstance($mybb, $lang);
+		}
 		$formatterManager->registerFormatter(new profileVisitorsFormatter($mybb, $lang, "profilevisitors"));
     }
 
@@ -75,7 +78,10 @@ class profileVisitorsMyAlerts
         global $db, $cache;
         
         if (function_exists('myalerts_is_activated') && myalerts_is_activated()) {
-            $alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
+    		$alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::getInstance();
+    		if($alertTypeManager === false) {
+    			$alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
+    		}
             $alertType = new MybbStuff_MyAlerts_Entity_AlertType();
         	$alertType->setCode('profilevisitors');
         	$alertType->setEnabled(true);
@@ -88,7 +94,10 @@ class profileVisitorsMyAlerts
         global $db, $cache;
     
         if (self::isEnabled()) {
-            $alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
+    		$alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::getInstance();
+    		if($alertTypeManager === false) {
+    			$alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance($db, $cache);
+    		}
             $alertTypeManager->deleteByCode('profilevisitors');
     	}
     }
@@ -102,7 +111,7 @@ class profileVisitorsMyAlerts
      */
     public static function alert($uid, $from)
     {
-    	global $db, $lang, $mybb, $alert;
+    	global $db, $lang, $mybb;
     	
         if (!self::isEnabled()) {
             return;
@@ -112,22 +121,12 @@ class profileVisitorsMyAlerts
         $result = $db->simple_select(
 			'alerts',
 			'id',
-			'uid = ' .$uid . ' AND from_user_id = ' . $from . ' AND unread = 1 AND alert_type_id = ' . self::$alert->getId() . ''
+			'uid = ' .$uid . ' AND from_user_id = ' . $from . ' AND unread = 1 AND alert_type_id = ' . self::$alertType->getId() . ''
         );
         
         if ($db->num_rows($result) == 0) {   
-            $alert = new MybbStuff_MyAlerts_Entity_Alert($uid, self::$alert, $from);
+            $alert = new MybbStuff_MyAlerts_Entity_Alert($uid, self::$alertType, $from);
             MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
         }
-        
-        /*
-        if ($db->num_rows($result) == 0) {   	
-			$alert = new MybbStuff_MyAlerts_Entity_Alert();
-            $alert->setUserId($uid);
-            $alert->setType(self::$alert);
-            $alert->setFromUserId($from);
-			MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
-		}
-        */
     }
 }
