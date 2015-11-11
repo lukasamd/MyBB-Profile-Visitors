@@ -23,27 +23,29 @@
 * Plugin MyAlerts Formatter Class
 * 
 */
-class profileVisitorsFormatter extends MybbStuff_MyAlerts_Formatter_AbstractFormatter
-{
-	public function init()
-	{
-		$this->alertTypeName = 'profilevisitors';
-        if (!$this->lang->profileVisitors) {
-			$this->lang->load('profileVisitors');
-		}
-	}
-
-	public function formatAlert(MybbStuff_MyAlerts_Entity_Alert $alert, array $outputAlert)
-	{
-        $from_uid = $alert->getFromUserId();
-        $from = get_user($from_uid);
-        $username = format_name($from['username'], $from['usergroup'], $from['displaygroup']);
+if (class_exists('MybbStuff_MyAlerts_Formatter_AbstractFormatter')) {
+    class profileVisitorsFormatter extends MybbStuff_MyAlerts_Formatter_AbstractFormatter
+    {
+    	public function init()
+    	{
+    		$this->alertTypeName = 'profilevisitors';
+            if (!$this->lang->profileVisitors) {
+    			$this->lang->load('profileVisitors');
+    		}
+    	}
     
-        return $this->lang->sprintf($this->lang->profileVisitorsAlert, $username);				
-	}
-
-	public function buildShowLink(MybbStuff_MyAlerts_Entity_Alert $alert)
-	{
-        return "{$this->mybb->settings['bburl']}/member.php?action=profile&uid=" . $alert->getFromUserId();         
-	}
+    	public function formatAlert(MybbStuff_MyAlerts_Entity_Alert $alert, array $outputAlert)
+    	{
+            $from_uid = $alert->getFromUserId();
+            $from = get_user($from_uid);
+            $username = format_name($from['username'], $from['usergroup'], $from['displaygroup']);
+        
+            return $this->lang->sprintf($this->lang->profileVisitorsAlert, $username);				
+    	}
+    
+    	public function buildShowLink(MybbStuff_MyAlerts_Entity_Alert $alert)
+    	{
+            return "{$this->mybb->settings['bburl']}/member.php?action=profile&uid=" . $alert->getFromUserId();         
+    	}
+    }	
 }
