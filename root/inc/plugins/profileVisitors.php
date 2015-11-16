@@ -58,7 +58,7 @@ function profileVisitors_info() {
         'website' => 'https://lukasztkacz.com',
         'author' => 'Lukasz Tkacz',
         'authorsite' => 'https://lukasztkacz.com',
-        'version' => '1.5.0 BETA',
+        'version' => '1.5.0',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',
