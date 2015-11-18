@@ -58,7 +58,7 @@ function profileVisitors_info() {
         'website' => 'https://lukasztkacz.com',
         'author' => 'Lukasz Tkacz',
         'authorsite' => 'https://lukasztkacz.com',
-        'version' => '1.5.0',
+        'version' => '1.6.0',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',
@@ -134,6 +134,10 @@ class profileVisitors
     public static function addTemplates() 
     {
         global $mybb, $lang, $cache, $templatelist, $formatterManager;
+        
+        if ($mybb->user['uid'] == 0) {
+            return;
+        }
         
         $lang->load("profileVisitors");
         if (THIS_SCRIPT == 'memberlist.php') {
