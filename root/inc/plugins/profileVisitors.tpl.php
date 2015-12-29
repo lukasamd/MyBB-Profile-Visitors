@@ -87,7 +87,7 @@ class profileVisitorsActivator
         }
         
         
-        find_replace_templatesets('usercp_options', '#' . preg_quote('{$lang->invisible_mode}</label></span></td>') . '#', '{$lang->invisible_mode}{$lang->invisible_mode}</label></span></td>{$profileVisitorsUCP}');
+        find_replace_templatesets('usercp_options', '#' . preg_quote('{$lang->invisible_mode}</label></span></td>') . '#', '{$lang->invisible_mode}</label></span></td>{$profileVisitorsUCP}');
         find_replace_templatesets('member_profile', '#' . preg_quote('{$modoptions}') . '#', '{$profileVisitors}{$modoptions}');    
     }
 

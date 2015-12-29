@@ -20,6 +20,3 @@
 
 $l['profileVisitorsTitle'] = 'Ostatni goście';
 $l['profileVisitorsLabel'] = 'Pokazuj ostanich odwiedzających mój profil.';
-
-$l['profileVisitorsAlert'] = "{1} odwiedził Twój profil.";
-$l['myalerts_setting_profilevisitors'] = 'Otrzymywać powiadomienia, gdy ktoś odwiedzi mój profil?';

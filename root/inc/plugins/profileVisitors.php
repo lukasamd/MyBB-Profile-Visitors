@@ -45,20 +45,14 @@ function profileVisitors_info() {
     global $lang;
     
     $lang->load("profileVisitors");
-    $lang->profileVisitorsDesc = '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" style="float:right;">' .
-        '<input type="hidden" name="cmd" value="_s-xclick">' . 
-        '<input type="hidden" name="hosted_button_id" value="3BTVZBUG6TMFQ">' .
-        '<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' .
-        '<img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">' .
-        '</form>' . $lang->profileVisitorsDesc;
 
     return Array(
         'name' => $lang->profileVisitorsName,
         'description' => $lang->profileVisitorsDesc,
-        'website' => 'https://lukasztkacz.com',
-        'author' => 'Lukasz Tkacz',
-        'authorsite' => 'https://lukasztkacz.com',
-        'version' => '1.6.0',
+        'website' => 'https://tkacz.pro',
+        'author' => 'Lukasz Tkacz (Tkacz.pro)',
+        'authorsite' => 'https://tkacz.pro',
+        'version' => '1.7.0',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',
@@ -93,17 +87,6 @@ function profileVisitors_activate() {
 
     require_once MYBB_ROOT . '/inc/plugins/profileVisitors.tpl.php';
     profileVisitorsActivator::activate();
-    
-    if (function_exists('myalerts_is_activated') && myalerts_is_activated()) {
-    	$alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance(
-    		$db,
-    		$cache
-    	);
-        $alertType = new MybbStuff_MyAlerts_Entity_AlertType();
-    	$alertType->setCode('profilevisitors');
-    	$alertType->setEnabled(true);
-        $alertTypeManager->add($alertType);
-    }
 }
 
 function profileVisitors_deactivate() {
@@ -111,14 +94,6 @@ function profileVisitors_deactivate() {
     
     require_once MYBB_ROOT . '/inc/plugins/profileVisitors.tpl.php';
     profileVisitorsActivator::deactivate();
-    
-    if (function_exists('myalerts_is_activated') && myalerts_is_activated()) {
-    	$alertTypeManager = MybbStuff_MyAlerts_AlertTypeManager::createInstance(
-    		$db,
-    		$cache
-    	);
-        $alertTypeManager->deleteByCode('profilevisitors');
-    }
 }
 
 /**
@@ -146,17 +121,6 @@ class profileVisitors
         if (THIS_SCRIPT == 'usercp.php') {
             $templatelist .= ',profileVisitors_UCP'; 
         }
-        
-        // Register MyAlerts data
-        if (function_exists('myalerts_is_activated') && myalerts_is_activated()) {
-            $formatterManager = MybbStuff_MyAlerts_AlertFormatterManager::getInstance();
-    		$formatterManager->registerFormatter(
-                new MybbStuff_MyAlerts_Formatter_ProfileVisitorsFormatter(
-                    $mybb, 
-                    $lang, 
-                    "profilevisitors")
-            );
-        }
     }
     
     
@@ -176,12 +140,6 @@ class profileVisitors
             $sql = "REPLACE INTO " . TABLE_PREFIX . "profile_visitors 
                     VALUES ({$memprofile['uid']}, {$mybb->user['uid']}, " . TIME_NOW . ")";
             $db->query($sql);
-            
-            // Send alert
-            if (function_exists('myalerts_is_activated') && myalerts_is_activated()) {
-                self::sendAlert($memprofile['uid'], $mybb->user['uid']);
-            
-            }
         }
         
         // Select data and cleanup 
@@ -226,40 +184,6 @@ class profileVisitors
             eval("\$profileVisitorsList .= \"" . $templates->get("profileVisitors_Row") . "\";");	
         }
         eval("\$profileVisitors = \"" . $templates->get("profileVisitors") . "\";");            
-    }
-    
-    
-    /**
-     * Send alert on visit
-     * 
-     */
-    public static function sendAlert($uid, $from)
-    {
-        global $db;
-        
-    	$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode(
-    		'profilevisitors'
-    	);
-        
-        if ($alertType == null || !$alertType->getEnabled()) {
-            return;
-        }
-        
-         // Is already alerted?
-        $result = $db->simple_select(
-        	'alerts',
-        	'id',
-        	'uid = ' .$uid . ' AND from_user_id = ' . $from . ' AND unread = 1 AND alert_type_id = ' . $alertType->getId() . ''
-        );
-        
-        if ($db->num_rows($result) == 0) {
-    		$alert = new MybbStuff_MyAlerts_Entity_Alert(
-    			$uid,
-    			$alertType,
-    			$from
-    		);
-    		MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
-        }
     }
      
     /**

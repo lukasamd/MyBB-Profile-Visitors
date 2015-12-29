@@ -1,3 +1,9 @@
+Version 1.7.0
+    * Remove integration with MyAlerts
+    * Fix template edition
+    * Change author info
+
+
 Version 1.6.0
     * Small bugfix
 

@@ -34,6 +34,3 @@ $l['profileVisitorsAvatarWidthDesc'] = 'Wymiary awatara w widoku listy odwiedzaj
 
 $l['profileVisitorsForceSave'] = 'Wymuś zapisywanie danych';
 $l['profileVisitorsForceSaveDesc'] = 'Jeżeli włączono, dodatek będzie zbierał dane nawet jeeli uytkownik wyłączy wyświetlanie listy w profilu.';
-
-$l['profileVisitorsMyAlerts'] = 'Integracja z MyAlerts';
-$l['profileVisitorsMyAlertsDesc'] = 'Jeżeli włączono, dodatek będzie powiadamiał o odwiedzinach profilu.';

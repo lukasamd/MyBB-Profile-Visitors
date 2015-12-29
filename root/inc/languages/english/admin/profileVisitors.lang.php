@@ -34,7 +34,3 @@ $l['profileVisitorsAvatarWidthDesc'] = 'Profile visitor avatar width (in pixels)
 
 $l['profileVisitorsForceSave'] = 'Force save';
 $l['profileVisitorsForceSaveDesc'] = 'If enabled, plugin will always saves data about views.';
-
-$l['profileVisitorsMyAlerts'] = 'MyAlerts integration';
-$l['profileVisitorsMyAlertsDesc'] = 'If enabled, plugin will sends alerts to users.';
-

@@ -3,7 +3,6 @@
 This plugin displays last profile visitors in member view like Invision Power Board. 
 There is few settings:
 
-* Integration with MyAlerts
 * Limit number of guests
 * Determine avatar dimensions
 * Users can disable this feature in UCP
@@ -11,4 +10,5 @@ There is few settings:
 
 ## Donate
 
-This plugin add link to author website (only for web spiders). If you do not want this, do not use plugin, or make donate and contact author.
+This plugin add link to author website (only for web spiders). 
+If you do not want this, do not use plugin, or make donate and contact author.
