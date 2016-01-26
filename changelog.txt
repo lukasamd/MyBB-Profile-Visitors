@@ -1,3 +1,7 @@
+Version 1.8.0
+    * Fix installation bug
+
+
 Version 1.7.0
     * Remove integration with MyAlerts
     * Fix template edition

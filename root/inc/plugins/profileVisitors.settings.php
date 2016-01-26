@@ -109,6 +109,11 @@ class profileVisitorsInstaller
             'gid' => $gid
         );
         $db->insert_query('settings', $setting);
+        
+        if (!$db->field_exists("show_profile_visitors", "users")) {
+            $db->add_column("users", "show_profile_visitors", "INT NOT NULL DEFAULT '1'");
+        }
+        rebuild_settings();
     }
 
     public static function uninstall() 
