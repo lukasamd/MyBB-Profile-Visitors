@@ -52,7 +52,6 @@ class profileVisitorsInstaller
         $db->query($sql);
 
         $settings_group = array(
-            'gid' => 'NULL',
             'name' => 'profileVisitors',
             'title' => $db->escape_string($lang->profileVisitorsName),
             'description' => $db->escape_string($lang->profileVisitorsGroupDesc),
@@ -63,7 +62,6 @@ class profileVisitorsInstaller
         $gid = (int) $db->insert_id();
 
         $setting = array(
-            'sid' => 'NULL',
             'name' => 'profileVisitorsEnabled',
             'title' => $db->escape_string($lang->profileVisitorsEnabled),
             'description' => $db->escape_string($lang->profileVisitorsEnabledDesc),
@@ -75,7 +73,6 @@ class profileVisitorsInstaller
         $db->insert_query('settings', $setting);
         
         $setting = array(
-            'sid' => 'NULL',
             'name' => 'profileVisitorsLimit',
             'title' => $db->escape_string($lang->profileVisitorsLimit),
             'description' => $db->escape_string($lang->profileVisitorsLimitDesc),
@@ -87,7 +84,6 @@ class profileVisitorsInstaller
         $db->insert_query('settings', $setting);
         
         $setting = array(
-            'sid' => 'NULL',
             'name' => 'profileVisitorsAvatarWidth',
             'title' => $db->escape_string($lang->profileVisitorsAvatarWidth),
             'description' => $db->escape_string($lang->profileVisitorsAvatarWidthDesc),
@@ -99,7 +95,6 @@ class profileVisitorsInstaller
         $db->insert_query('settings', $setting);
         
         $setting = array(
-            'sid' => 'NULL',
             'name' => 'profileVisitorsForceSave',
             'title' => $db->escape_string($lang->profileVisitorsForceSave),
             'description' => $db->escape_string($lang->profileVisitorsForceSaveDesc),
