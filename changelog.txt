@@ -1,3 +1,7 @@
+Version 1.8.1
+    * Polish lang fix
+
+
 Version 1.8.0
     * Fix installation bug
 

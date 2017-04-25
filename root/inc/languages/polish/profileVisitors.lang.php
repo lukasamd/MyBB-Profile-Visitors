@@ -19,4 +19,4 @@
  */
 
 $l['profileVisitorsTitle'] = 'Ostatni goście';
-$l['profileVisitorsLabel'] = 'Pokazuj ostanich odwiedzających mój profil.';
+$l['profileVisitorsLabel'] = 'Pokazuj ostatnich odwiedzających mój profil.';

@@ -52,7 +52,7 @@ function profileVisitors_info() {
         'website' => 'https://tkacz.pro',
         'author' => 'Lukasz Tkacz (Tkacz.pro)',
         'authorsite' => 'https://tkacz.pro',
-        'version' => '1.8.0',
+        'version' => '1.8.1',
         'guid' => '',
         'compatibility' => '18*',
         'codename' => 'profile_visitors',
