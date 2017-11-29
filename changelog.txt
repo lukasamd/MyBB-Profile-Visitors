@@ -1,3 +1,8 @@
+Version 1.9.0
+    * Fix installation (MySQL 5.6+ compatibility)
+    * Removed "Thanks" code
+
+
 Version 1.8.1
     * Polish lang fix
 

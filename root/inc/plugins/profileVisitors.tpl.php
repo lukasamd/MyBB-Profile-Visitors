@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Profile Visistors plugin for MyBB.
+ * This file is part of Profile Visitors plugin for MyBB.
  * Copyright (C) Lukasz Tkacz <lukasamd@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,6 @@ class profileVisitorsActivator
         
         
         self::$tpl[] = array(
-            "tid" => NULL,
             "title" => 'profileVisitors_Row',
             "template" => $db->escape_string('<tr>
 	<td class="{$bgcolor}" style="width:5%;"><strong><img src="{$avatar[\'image\']}" alt="" {$avatar[\'width_height\']}/></td>
@@ -51,7 +50,6 @@ class profileVisitorsActivator
         );
         
         self::$tpl[] = array(
-            "tid" => NULL,
             "title" => 'profileVisitors',
             "template" => $db->escape_string('<table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
 	<tr>
@@ -66,7 +64,6 @@ class profileVisitorsActivator
         
         
         self::$tpl[] = array(
-            "tid" => NULL,
             "title" => 'profileVisitors_UCP',
             "template" => $db->escape_string('</tr><tr>
 <td valign="top" width="1"><input type="checkbox" class="checkbox" name="show_profile_visitors" id="show_profile_visitors" value="1" {$profileVisitorsOption} /></td>

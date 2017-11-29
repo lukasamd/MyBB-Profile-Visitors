@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Profile Visistors plugin for MyBB.
+ * This file is part of Profile Visitors plugin for MyBB.
  * Copyright (C) Lukasz Tkacz <lukasamd@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify

@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of Profile Visistors plugin for MyBB.
+ * This file is part of Profile Visitors plugin for MyBB.
  * Copyright (C) Lukasz Tkacz <lukasamd@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,6 @@ if (profileVisitors::getConfig('Enabled')) {
     $plugins->add_hook('member_profile_end', ['profileVisitors', 'actionProfile']);
     $plugins->add_hook('usercp_options_end', ['profileVisitors', 'profileOptionsStart']);
     $plugins->add_hook('usercp_do_options_start', ['profileVisitors', 'profileOptionsEnd']);
-    $plugins->add_hook('pre_output_page', ['profileVisitors', 'pluginThanks']);
 }
 
 /**
@@ -192,7 +191,7 @@ class profileVisitors
      */
     public static function profileOptionsStart() 
     {
-        global $mybb, $user, $lang, $profileVisitorsUCP, $profileVisitorsOption, $templates;
+        global $user, $lang, $profileVisitorsUCP, $profileVisitorsOption, $templates;
         
         // Load lang
         $lang->load("profileVisitors");
@@ -234,21 +233,4 @@ class profileVisitors
 
         return $mybb->settings["profileVisitors{$name}"];
     }
-    
-    /**
-     * Say thanks to plugin author - paste link to author website.
-     * Please don't remove this code if you didn't make donate
-     * It's the only way to say thanks without donate :)     
-     */
-    public static function pluginThanks(&$content) 
-    {
-        global $session, $lukasamd_thanks;
-        
-        if (!isset($lukasamd_thanks) && $session->is_spider) {
-            $thx = '<div style="margin:auto; text-align:center;">This forum uses <a href="https://lukasztkacz.com">Lukasz Tkacz</a> MyBB addons.</div></body>';
-            $content = str_replace('</body>', $thx, $content);
-            $lukasamd_thanks = true;
-        }
-    }
-
 }  
